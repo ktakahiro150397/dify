@@ -20,6 +20,7 @@ import LoadingAnim from '@/app/components/app/chat/loading-anim'
 import Citation from '@/app/components/app/chat/citation'
 import { EditTitle } from '@/app/components/app/annotation/edit-annotation-modal/edit-item'
 import type { Emoji } from '@/app/components/tools/types'
+import type { AppData } from '@/models/share'
 
 type AnswerProps = {
   item: ChatItem
@@ -32,6 +33,7 @@ type AnswerProps = {
   showPromptLog?: boolean
   chatAnswerContainerInner?: string
   hideProcessDetail?: boolean
+  appData?: AppData
 }
 const Answer: FC<AnswerProps> = ({
   item,
@@ -44,6 +46,7 @@ const Answer: FC<AnswerProps> = ({
   showPromptLog,
   chatAnswerContainerInner,
   hideProcessDetail,
+  appData,
 }) => {
   const { t } = useTranslation()
   const {
@@ -97,7 +100,7 @@ const Answer: FC<AnswerProps> = ({
           )
         }
       </div>
-      <div className='chat-answer-container grow w-0 ml-4' ref={containerRef}>
+      <div className='chat-answer-container group grow w-0 ml-4' ref={containerRef}>
         <div className={`group relative pr-10 ${chatAnswerContainerInner}`}>
           <AnswerTriangle className='absolute -left-2 top-0 w-2 h-3 text-gray-100' />
           <div
@@ -129,9 +132,26 @@ const Answer: FC<AnswerProps> = ({
                 />
               )
             }
+            {/** Render the normal steps */}
             {
-              workflowProcess && (
-                <WorkflowProcess data={workflowProcess} hideInfo hideProcessDetail={hideProcessDetail} />
+              workflowProcess && !hideProcessDetail && (
+                <WorkflowProcess
+                  data={workflowProcess}
+                  item={item}
+                  hideInfo
+                  hideProcessDetail={hideProcessDetail}
+                />
+              )
+            }
+            {/** Hide workflow steps by it's settings in siteInfo */}
+            {
+              workflowProcess && hideProcessDetail && appData && appData.site.show_workflow_steps && (
+                <WorkflowProcess
+                  data={workflowProcess}
+                  item={item}
+                  hideInfo
+                  hideProcessDetail={hideProcessDetail}
+                />
               )
             }
             {
