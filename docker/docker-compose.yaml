@@ -257,30 +257,6 @@ services:
     # ports:
     #   - "6379:6379"
 
-    # The Weaviate vector store.
-  weaviate:
-    image: semitechnologies/weaviate:1.19.0
-    restart: always
-    volumes:
-      # Mount the Weaviate data directory to the container.
-      - ./volumes/weaviate:/var/lib/weaviate
-    environment:
-      # The Weaviate configurations
-      # You can refer to the [Weaviate](https://weaviate.io/developers/weaviate/config-refs/env-vars) documentation for more information.
-      QUERY_DEFAULTS_LIMIT: 25
-      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'false'
-      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
-      DEFAULT_VECTORIZER_MODULE: 'none'
-      CLUSTER_HOSTNAME: 'node1'
-      AUTHENTICATION_APIKEY_ENABLED: 'true'
-      AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'WVF5YThaHlkYwhGUSmCRgsX3tD5ngdN8pkih'
-      AUTHENTICATION_APIKEY_USERS: 'hello@dify.ai'
-      AUTHORIZATION_ADMINLIST_ENABLED: 'true'
-      AUTHORIZATION_ADMINLIST_USERS: 'hello@dify.ai'
-    # uncomment to expose weaviate port to host
-    # ports:
-    #  - "8080:8080"
-
     # The DifySandbox
   sandbox:
     image: langgenius/dify-sandbox:0.2.1
@@ -371,8 +347,32 @@ services:
       - default
       - dify_api_network
 
-  # Qdrant vector store.
-  # (if used, you need to set VECTOR_STORE to qdrant in the api & worker service.)
+  # The Weaviate vector store.
+  weaviate:
+    image: semitechnologies/weaviate:1.19.0
+    restart: always
+    volumes:
+      # Mount the Weaviate data directory to the container.
+      - ./volumes/weaviate:/var/lib/weaviate
+    environment:
+      # The Weaviate configurations
+      # You can refer to the [Weaviate](https://weaviate.io/developers/weaviate/config-refs/env-vars) documentation for more information.
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'false'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'none'
+      CLUSTER_HOSTNAME: 'node1'
+      AUTHENTICATION_APIKEY_ENABLED: 'true'
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'WVF5YThaHlkYwhGUSmCRgsX3tD5ngdN8pkih'
+      AUTHENTICATION_APIKEY_USERS: 'hello@dify.ai'
+      AUTHORIZATION_ADMINLIST_ENABLED: 'true'
+      AUTHORIZATION_ADMINLIST_USERS: 'hello@dify.ai'
+    # uncomment to expose weaviate port to host
+    # ports:
+    #  - "8080:8080"
+
+    # Qdrant vector store.
+    # (if used, you need to set VECTOR_STORE to qdrant in the api & worker service.)
   qdrant:
     image: langgenius/qdrant:v1.7.3
     profiles:
