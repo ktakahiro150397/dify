@@ -4,12 +4,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useBoolean } from 'ahooks'
 import { t } from 'i18next'
 import produce from 'immer'
-import cn from 'classnames'
+import cn from '@/utils/classnames'
 import TextGenerationRes from '@/app/components/app/text-generate/item'
 import NoData from '@/app/components/share/text-generation/no-data'
 import Toast from '@/app/components/base/toast'
 import { sendCompletionMessage, sendWorkflowMessage, updateFeedback } from '@/service/share'
-import type { Feedbacktype } from '@/app/components/app/chat/type'
+import type { Feedbacktype } from '@/app/components/base/chat/chat/type'
 import Loading from '@/app/components/base/loading'
 import type { PromptConfig } from '@/models/debug'
 import type { InstalledApp } from '@/models/explore'
@@ -19,6 +19,7 @@ import { NodeRunningStatus, WorkflowRunningStatus } from '@/app/components/workf
 import type { WorkflowProcess } from '@/app/components/base/chat/types'
 import { sleep } from '@/utils'
 import type { SiteInfo } from '@/models/share'
+import { TEXT_GENERATION_TIMEOUT_MS } from '@/config'
 
 export type IResultProps = {
   isWorkflow: boolean
@@ -186,7 +187,7 @@ const Result: FC<IResultProps> = ({
     let isEnd = false
     let isTimeout = false;
     (async () => {
-      await sleep(1000 * 60) // 1min timeout
+      await sleep(TEXT_GENERATION_TIMEOUT_MS)
       if (!isEnd) {
         setRespondingFalse()
         onCompleted(getCompletionRes(), taskId, false)
